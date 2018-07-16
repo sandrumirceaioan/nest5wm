@@ -74,8 +74,6 @@ export class UsersService {
             if (!logged) throw new HttpException('Please log in to continue!', HttpStatus.UNAUTHORIZED);
             return logged;
         } catch(e) {
-            if (e.name == 'TokenExpiredError') throw new HttpException('Session expired!', HttpStatus.UNAUTHORIZED);
-            if (e.name == 'JsonWebTokenError') throw new HttpException('Token wrong or missing!', HttpStatus.UNAUTHORIZED);
             throw new HttpException(e, HttpStatus.UNAUTHORIZED);
         }
     }
