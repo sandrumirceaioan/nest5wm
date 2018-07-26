@@ -9,10 +9,12 @@ import { UsersModule } from 'users/users.module';
 // import { CommentsModule } from './comments/comments.module';
 // import { HistoryModule } from './history/history.module';
 // import { WorkmeterModule } from './workmeter/workmeter.module';
+import { CompaniesModule } from './companies/companies.module';
 
 @Module({
   imports: [
      UsersModule,
+     CompaniesModule,
     // ProjectsModule,
     // ListsModule,
     // TasksModule,
