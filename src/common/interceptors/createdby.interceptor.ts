@@ -4,7 +4,7 @@ import * as jwt_decode from "jwt-decode";
 
 @Injectable()
 export class Createdby implements NestInterceptor {
-  intercept(request, call$: Observable<any>): Observable<any> {
+  intercept(request: any, call$: Observable<any>): Observable<any> {
     let token = request.headers['x-access-token'];
     let decoded = jwt_decode(token);
     request.body.createdBy = decoded.id;
