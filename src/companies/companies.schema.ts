@@ -6,7 +6,7 @@ export const CompaniesSchema = new mongoose.Schema({
   companyOwner: String,
   companyDescription: String,
   companyAddress: String,
-  companyContact: String,
+  companyPhone: String,
   companyEmail: {
     type: String,
     unique: true

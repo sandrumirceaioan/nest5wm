@@ -23,6 +23,7 @@
     "@types/mongoose": "^5.2.0",
     "class-validator": "^0.8.5",
     "fastify-formbody": "^2.0.0",
+    "jwt-decode": "^2.2.0",
     "jwt-then": "^1.0.1",
     "md5": "^2.2.1",
     "mongoose": "^5.2.3",
