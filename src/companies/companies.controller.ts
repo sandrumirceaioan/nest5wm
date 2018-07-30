@@ -1,19 +1,27 @@
-import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, UseInterceptors } from '@nestjs/common';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './companies.dto';
-import { LoggedGuard } from '../common/guards/logged.guard';
-import { Roles } from '../common/decorators/roles.decorator';
+import { Roles } from 'common/decorators/roles.decorator';
+import { AuthGuard } from 'common/guards/auth.guard';
+import { CreatedByInterceptor } from 'common/interceptors/createdby.interceptor';
 
 @Controller('companies')
-@UseGuards(LoggedGuard)
+@UseGuards(AuthGuard)
 export class CompaniesController {
 
     constructor(private readonly companiesService: CompaniesService){}
 
     @Post('/add')
     @Roles('admin')
-    async login(@Body() params){
-        return this.companiesService.addCompany(params);
+    @UseInterceptors(CreatedByInterceptor)
+    async login(@Body() createCompanyDto: CreateCompanyDto){
+        return this.companiesService.addCompany(createCompanyDto);
+    }
+
+    @Post('/all')
+    @Roles('admin')
+    async all(@Body() {}){
+        return this.companiesService.allCompanies();
     }
 
 }

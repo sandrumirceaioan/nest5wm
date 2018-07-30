@@ -1,13 +1,21 @@
-import { NestInterceptor, Injectable } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import { Injectable, NestInterceptor, ExecutionContext, HttpException, HttpStatus } from '@nestjs/common';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import * as jwt_decode from "jwt-decode";
 
 @Injectable()
-export class Createdby implements NestInterceptor {
-  intercept(request: any, call$: Observable<any>): Observable<any> {
-    let token = request.headers['x-access-token'];
-    let decoded = jwt_decode(token);
-    request.body.createdBy = decoded;
-    return call$;
+export class CreatedByInterceptor implements NestInterceptor {
+  intercept(
+    context: ExecutionContext,
+    call$: Observable<any>,
+  ): Observable<any> {
+    let request = context.switchToHttp().getRequest();
+    let decoded: any = jwt_decode(request.headers['x-access-token']);
+    request.body.createdBy = decoded.id;
+    return call$.pipe(
+      catchError(err =>
+        throwError(new HttpException(err, HttpStatus.BAD_GATEWAY)),
+      )
+    );
   }
 }

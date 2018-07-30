@@ -27,4 +27,9 @@ export class CompaniesService {
         }
     }
 
+    async allCompanies(): Promise<Company[]>{
+        let companies = await this.companyModel.find().sort({created: 1});
+        return companies;
+    }
+
 }

@@ -70,7 +70,6 @@ export class UsersService {
         try {
             const token = await jwt.verify(params.token, 's0!p3n~d34m0$pr4l3*');
             const logged = await this.userModel.findOne({_id: new ObjectId(token.id)});
-            if (!logged) throw new HttpException('Please log in to continue!', HttpStatus.UNAUTHORIZED);
             return logged;
         } catch(e) {
             throw new HttpException(e, HttpStatus.UNAUTHORIZED);
