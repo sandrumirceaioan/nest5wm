@@ -1,9 +1,10 @@
 import { Controller, Get, Post, Body, UseGuards, UseInterceptors } from '@nestjs/common';
 import { CompaniesService } from './companies.service';
 import { CreateCompanyDto } from './companies.dto';
-import { Roles } from 'common/decorators/roles.decorator';
-import { AuthGuard } from 'common/guards/auth.guard';
-import { CreatedByInterceptor } from 'common/interceptors/createdby.interceptor';
+import { Roles } from '../common/decorators/roles.decorator';
+import { AuthGuard } from '../common/guards/auth.guard';
+import { CreatedByInterceptor } from '../common/interceptors/createdby.interceptor';
+import { ValidationPipe } from '../common/pipes/validation.pipe';
 
 @Controller('companies')
 @UseGuards(AuthGuard)
@@ -14,7 +15,7 @@ export class CompaniesController {
     @Post('/add')
     @Roles('admin')
     @UseInterceptors(CreatedByInterceptor)
-    async login(@Body() createCompanyDto: CreateCompanyDto){
+    async add(@Body(new ValidationPipe()) createCompanyDto: CreateCompanyDto){
         return this.companiesService.addCompany(createCompanyDto);
     }
 
