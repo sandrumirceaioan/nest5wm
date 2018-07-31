@@ -11,19 +11,22 @@ export class CompaniesController {
 
     constructor(private readonly companiesService: CompaniesService){}
 
-    // @Post('/add')
-    // @Roles('admin')
-    // @UseInterceptors(CreatedByInterceptor)
-    // async add(@Body() createCompanyDto){
-    //     console.log(createCompanyDto);
-    //     return this.companiesService.addCompany(createCompanyDto);
-    // }
-
     @Post('/add')
-@UseInterceptors(FileInterceptor('companyLogo'))
-uploadFile(@UploadedFile() file) {
-  console.log(file);
-}
+    @Roles('admin')
+    @UseInterceptors(CreatedByInterceptor)
+    @UseInterceptors(FileInterceptor('companyLogo'))
+    async add(@Body() createCompanyDto, @UploadedFile() file){
+        console.log('1: ',createCompanyDto);
+        console.log('2: ',file);
+        return this.companiesService.addCompany(createCompanyDto);
+    }
+
+
+    // @UseInterceptors(FileInterceptor('companyLogo'))
+    //     uploadFile(@UploadedFile() file) {
+    //     console.log(file);
+    //     }
+
 
     @Post('/all')
     @Roles('admin')
