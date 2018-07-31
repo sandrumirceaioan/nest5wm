@@ -14,17 +14,19 @@ export class CompaniesService {
         @InjectModel('Company') private readonly companyModel: Model<Company>
     ){}
 
-    async addCompany(createCompanyDto: CreateCompanyDto): Promise<Company>{
-        let query = {companyName: createCompanyDto.companyName};
-        let alreadyExists = await this.companyModel.findOne(query);
-        if (alreadyExists) throw new HttpException('Company already exists!', HttpStatus.BAD_REQUEST);
-        let newCompany = new this.companyModel(createCompanyDto);
-        try {
-            let company = await newCompany.save();
-            return company;
-        } catch(e){
-            throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    async addCompany(params): Promise<Company>{
+        //console.log(params);
+        return;
+        // let query = {companyName: createCompanyDto.companyName};
+        // let alreadyExists = await this.companyModel.findOne(query);
+        // if (alreadyExists) throw new HttpException('Company already exists!', HttpStatus.BAD_REQUEST);
+        // let newCompany = new this.companyModel(createCompanyDto);
+        // try {
+        //     let company = await newCompany.save();
+        //     return company;
+        // } catch(e){
+        //     throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+        // }
     }
 
     async allCompanies(): Promise<Company[]>{
