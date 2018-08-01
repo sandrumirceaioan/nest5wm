@@ -1,5 +1,5 @@
 import * as mongoose from 'mongoose';
-import * as mongooseHidden from 'mongoose-hidden';
+import { isEmail } from 'validator';
 
 export const CompaniesSchema = new mongoose.Schema({
   companyName: String,
@@ -9,7 +9,8 @@ export const CompaniesSchema = new mongoose.Schema({
   companyPhone: String,
   companyEmail: {
     type: String,
-    unique: true
+    unique: true,
+    validate: [ isEmail, 'Invalid email format!' ]
   },
   companyLogo: {
     type: String,
