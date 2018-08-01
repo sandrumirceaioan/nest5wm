@@ -11,6 +11,10 @@ export const CompaniesSchema = new mongoose.Schema({
     type: String,
     unique: true
   },
+  companyLogo: {
+    type: String,
+    default: 'default-image.png'
+  },
   created: {
     type: Date,
     default: function(){
