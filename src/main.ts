@@ -7,7 +7,7 @@ async function bootstrap() {
 
 const app = await NestFactory.create(AppModule);
 
-	app.useGlobalFilters(new AnyExceptionFilter());
+	//app.useGlobalFilters(new AnyExceptionFilter());
 	app.setGlobalPrefix('/api');
   	app.useStaticAssets(join(__dirname + './../uploads'));
 	
