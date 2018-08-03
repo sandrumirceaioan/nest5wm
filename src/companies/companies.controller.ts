@@ -1,24 +1,25 @@
-import { Controller, Req, Put, Post, Body, UseGuards, UseInterceptors, UsePipes, UseFilters, FileInterceptor, UploadedFile, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Req, Put, Post, Body, UseGuards, UseInterceptors, UsePipes, FileInterceptor, UploadedFile, HttpException, HttpStatus } from '@nestjs/common';
 import { CompaniesService } from './companies.service';
 import { Roles } from 'common/decorators/roles.decorator';
 import { AuthGuard } from 'common/guards/auth.guard';
 import { CreatedByInterceptor } from 'common/interceptors/createdby.interceptor';
-import { AnyExceptionFilter } from 'common/filters/exceptions.filter';
 import { Company } from './companies.interface';
 
 @Controller('companies')
 @UseGuards(AuthGuard)
-@UseFilters(new AnyExceptionFilter())
 export class CompaniesController {
 
     constructor(private readonly companiesService: CompaniesService){
+
+        console.log(new HttpException('ceva', 400));
     }
 
     @Post('/add')
     @Roles('admin')
     @UseInterceptors(CreatedByInterceptor)
     async add(@Body() company: Company){
-        return this.companiesService.addCompany(company);
+             let cacat = this.companiesService.addCompany(company);
+            return cacat;
     }
 
     @Post('/all')

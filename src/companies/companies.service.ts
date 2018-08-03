@@ -8,12 +8,17 @@ export class CompaniesService {
 
     constructor(
         @InjectModel('Company') private readonly companyModel: Model<Company>
-    ){}
+    ){
+
+        console.log(new HttpException('ceva', 400));
+
+    }
 
     async addCompany(company: Company): Promise<Company>{
         let query = {companyName: company.companyName};
         let alreadyExists = await this.companyModel.findOne(query);
-        if (alreadyExists) throw new HttpException('Company already exists!', HttpStatus.BAD_REQUEST);
+        console.log(new HttpException('altceva', 400));
+        if (alreadyExists) throw new HttpException('pula', HttpStatus.I_AM_A_TEAPOT);
         let newCompany = new this.companyModel(company);
         try {
             let company = await newCompany.save();

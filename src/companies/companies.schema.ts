@@ -1,5 +1,4 @@
 import * as mongoose from 'mongoose';
-import { isEmail } from 'validator';
 
 export const CompaniesSchema = new mongoose.Schema({
   companyName: String,
@@ -7,11 +6,7 @@ export const CompaniesSchema = new mongoose.Schema({
   companyDescription: String,
   companyAddress: String,
   companyPhone: String,
-  companyEmail: {
-    type: String,
-    unique: true,
-    validate: [ isEmail, 'Invalid email format!' ]
-  },
+  companyEmail: String,
   companyLogo: {
     type: String,
     default: 'default-image.png'

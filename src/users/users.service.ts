@@ -2,7 +2,6 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './user.interface';
 import { Model } from 'mongoose';
-import { CreateUserDto } from "./user.dto";
 import * as md5 from 'md5';
 import * as jwt from "jwt-then";
 const ObjectId = require('mongoose').Types.ObjectId;
@@ -14,38 +13,13 @@ export class UsersService {
         @InjectModel('User') private readonly userModel: Model<User>
     ){}
 
-    /* register user */
-    // async registerUser(createUserDto: CreateUserDto): Promise<User> {
-
-    //     let orArray = [];
-    //     orArray.push({userName: {$regex: new RegExp("^" + createUserDto.userName + "$", "i")}});
-    //     orArray.push({emailAddress: {$regex: new RegExp("^" + createUserDto.emailAddress + "$")}});
-    //     let filter = {$or: orArray};
-
-    //     const salt = '4m0$pr4l3*s0!p3n~d3';
-    //     const userType = 'user';
-            
-    //     const userCheck = await this.userModel.findOne(filter);
-    //     if (userCheck) throw new HttpException('User already registered!', 400);
-        
-    //     createUserDto.userType = userType;
-    //     createUserDto.password = md5(createUserDto.password + salt);
-
-    //     const newUser = new this.userModel(createUserDto);
-    //     try {
-    //         const user = await newUser.save();
-    //         return user;
-    //     } catch(e) {
-    //         throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
-    //     }
-    // }
-
-    /* login user */
+     /* login user */
     async loginUser(params): Promise<User> {
         if (!params.userName || !params.password) throw new HttpException('username and password required', HttpStatus.BAD_REQUEST);
         let salt = '4m0$pr4l3*s0!p3n~d3';
         params.password = md5(params.password+salt);
         let loggedUser = await this.userModel.findOne(params);
+        console.log(new HttpException('ceva2', 400));
         if (!loggedUser) throw new HttpException('user not found', HttpStatus.UNAUTHORIZED);
 
         const JWT = {KEY: 's0!p3n~d34m0$pr4l3*',ALGORITHMS: 'HS256'};
