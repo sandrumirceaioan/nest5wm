@@ -9,17 +9,13 @@ import { Company } from './companies.interface';
 @UseGuards(AuthGuard)
 export class CompaniesController {
 
-    constructor(private readonly companiesService: CompaniesService){
-
-        console.log(new HttpException('ceva', 400));
-    }
+    constructor(private readonly companiesService: CompaniesService){}
 
     @Post('/add')
     @Roles('admin')
     @UseInterceptors(CreatedByInterceptor)
     async add(@Body() company: Company){
-             let cacat = this.companiesService.addCompany(company);
-            return cacat;
+        return this.companiesService.addCompany(company);
     }
 
     @Post('/all')

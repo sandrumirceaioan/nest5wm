@@ -11,19 +11,19 @@ export class CompaniesService {
     ){ }
 
     async addCompany(company: Company): Promise<Company>{
-        let query = {companyName: company.companyName};
-        let alreadyExists = await this.companyModel.findOne(query);
-        console.log(new HttpException('altceva', 400));
-        if (alreadyExists) throw new HttpException('pula', HttpStatus.I_AM_A_TEAPOT);
-
+        let check = await this.oneCompany(company.companyName);
+        if (check) throw new HttpException(`${company.companyName} company already exists`, HttpStatus.BAD_REQUEST);
         let newCompany = new this.companyModel(company);
-        return await newCompany.save();
-
+        let save = newCompany.save();
+        return save;
     }
 
     async allCompanies(): Promise<Company[]>{
-        let companies = await this.companyModel.find().sort({created: 1});
-        return companies;
+        return await this.companyModel.find().sort({created: 1});
+    }
+
+    async oneCompany(companyName: String): Promise<Company>{
+        return await this.companyModel.findOne({companyName});
     }
 
 }

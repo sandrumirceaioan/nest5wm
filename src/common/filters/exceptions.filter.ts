@@ -4,6 +4,8 @@ import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from
 export class AnyExceptionFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
 
+    console.log(exception);
+
     let response = host.switchToHttp().getResponse();
     let status = (exception instanceof HttpException) ? exception.getStatus(): HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -12,7 +14,7 @@ export class AnyExceptionFilter implements ExceptionFilter {
       .json({
         statusCode: status,
         timestamp: new Date().toISOString(),
-        message: exception.message.message || exception.message
+        message: exception.message || exception
       });
   }
 }
