@@ -41,13 +41,9 @@ export class UsersService {
 
     /* check logged */
     async checkLogged(params): Promise<User> {
-        try {
             const token = await jwt.verify(params.token, 's0!p3n~d34m0$pr4l3*');
             const logged = await this.userModel.findOne({_id: new ObjectId(token.id)});
             return logged;
-        } catch(e) {
-            throw new HttpException(e, HttpStatus.UNAUTHORIZED);
-        }
     }
 
     async oneUserById(id): Promise<User> {
