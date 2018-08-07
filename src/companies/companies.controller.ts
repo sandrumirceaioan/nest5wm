@@ -24,6 +24,12 @@ export class CompaniesController {
         return this.companiesService.allCompanies();
     }
 
+    @Post('/oneById')
+    @Roles('admin')
+    async oneById(@Body() params){
+        return this.companiesService.oneCompanyById(params);
+    }
+
 }
 
 

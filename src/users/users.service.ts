@@ -31,7 +31,7 @@ export class UsersService {
             algorithm: JWT.ALGORITHMS,
             expiresIn: 60*60*24
         });
-
+        
         if (!token) throw new HttpException('token could not be created', HttpStatus.INTERNAL_SERVER_ERROR);
         
         loggedUser = loggedUser.toJSON();
