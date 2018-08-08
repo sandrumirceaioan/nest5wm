@@ -34,4 +34,17 @@ export class CompaniesService {
         return company;
     }
 
+    async updateLogo(params, file): Promise<Company> {
+        let query = {
+            _id: new ObjectId(params._id)
+        };
+        let set = {
+            companyLogo: file.filename
+        };
+            let updatedCompany = await this.companyModel.findOneAndUpdate(query, set, {new: true});
+            if (!updatedCompany) throw new HttpException('company logo not updated', HttpStatus.INTERNAL_SERVER_ERROR);
+            return updatedCompany;
+    }
+    
+
 }

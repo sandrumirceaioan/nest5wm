@@ -12,6 +12,8 @@ import { of } from 'rxjs';
 @UseGuards(AuthGuard)
 export class CompaniesController {
 
+    company: Company;
+
     constructor(private readonly companiesService: CompaniesService){}
 
     @Post('/add')
@@ -53,9 +55,11 @@ export class CompaniesController {
         },
         limits: {fileSize: 1024*1024}
     }))
-    async upload(@UploadedFile() file){
-        console.log('uploaded: ', file);
-        return of(file);
+    async upload(@Body() params ,@UploadedFile() file){
+        if (file) {
+            return this.companiesService.updateLogo(params, file);
+        }
+        return of(null);
     }
 
 }
