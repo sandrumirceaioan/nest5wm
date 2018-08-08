@@ -4,6 +4,9 @@ import { Roles } from 'common/decorators/roles.decorator';
 import { AuthGuard } from 'common/guards/auth.guard';
 import { CreatedByInterceptor } from 'common/interceptors/createdby.interceptor';
 import { Company } from './companies.interface';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { of } from 'rxjs';
 
 @Controller('companies')
 @UseGuards(AuthGuard)
@@ -28,6 +31,31 @@ export class CompaniesController {
     @Roles('admin')
     async oneById(@Body() params){
         return this.companiesService.oneCompanyById(params);
+    }
+
+    @Post('/upload')
+    @Roles('admin')
+        @UseInterceptors(FileInterceptor('companyLogo', {
+        storage: diskStorage({
+            destination: (req, file, cb) => {
+                cb(null, './uploads/companies');
+            },
+            filename: (req, file, cb) => {
+                cb(null, `${file.originalname}`)
+            }
+        }),
+        fileFilter: (req, file, cb) => {
+            let ext = extname(file.originalname);
+            if(ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
+                return cb(new HttpException('Only images are allowed!',HttpStatus.BAD_REQUEST), null);
+            }
+            cb(null, true);
+        },
+        limits: {fileSize: 1024*1024}
+    }))
+    async upload(@UploadedFile() file){
+        console.log('uploaded: ', file);
+        return of(file);
     }
 
 }
