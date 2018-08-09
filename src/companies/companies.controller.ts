@@ -62,6 +62,12 @@ export class CompaniesController {
         return of(null);
     }
 
+    @Post('/update')
+    @Roles('admin')
+    async update(@Body() params: Company) {
+        return this.companiesService.updateOne(params);
+    }
+
 }
 
 

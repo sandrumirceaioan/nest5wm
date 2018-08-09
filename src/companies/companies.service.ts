@@ -42,8 +42,19 @@ export class CompaniesService {
             companyLogo: file.filename
         };
             let updatedCompany = await this.companyModel.findOneAndUpdate(query, set, {new: true});
-            if (!updatedCompany) throw new HttpException('company logo not updated', HttpStatus.INTERNAL_SERVER_ERROR);
+            if (!updatedCompany) throw new HttpException('company logo not updated', HttpStatus.BAD_REQUEST);
             return updatedCompany;
+    }
+
+    async updateOne(params): Promise<Company> {
+        console.log(params);
+        let query = {
+            _id: new ObjectId(params._id)
+        };
+;
+        let updatedCompany = await this.companyModel.findOneAndUpdate(query, params, {new: true});
+        if (!updatedCompany) throw new HttpException('company not updated', HttpStatus.BAD_REQUEST);
+        return updatedCompany;
     }
     
 
