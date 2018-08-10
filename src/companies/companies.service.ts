@@ -47,7 +47,6 @@ export class CompaniesService {
     }
 
     async updateOne(params): Promise<Company> {
-        console.log(params);
         let query = {
             _id: new ObjectId(params._id)
         };
