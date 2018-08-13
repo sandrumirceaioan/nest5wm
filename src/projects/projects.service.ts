@@ -11,23 +11,21 @@ export class ProjectsService {
     constructor(
         @InjectModel('Project') private readonly projectModel: Model<Project>
     ){ }
-
-    async addProject(project: Project, file): Promise<Project>{
-        console.log(project, file);
-        return;
-        // let check = await this.oneCompanybyName(project.projectName);
-        // if (check) throw new HttpException(`${project.projectName} project already exists`, HttpStatus.BAD_REQUEST);
-        // let newCompany = new this.projectModel(project);
-        // let save = newCompany.save();
-        // return save;
+    
+    async addProject(project: Project): Promise<Project>{
+        let check = await this.oneProjectbyName(project.projectName);
+        if (check) throw new HttpException(`${project.projectName} project already exists`, HttpStatus.BAD_REQUEST);
+        let newProject = new this.projectModel(project);
+        let save = newProject.save();
+        return save;
     }
 
     async allProjects(): Promise<Project[]>{
         return await this.projectModel.find().sort({created: 1});
     }
 
-    async oneCompanybyName(companyName: String): Promise<Project>{
-        return await this.projectModel.findOne({companyName});
+    async oneProjectbyName(projectName: String): Promise<Project>{
+        return await this.projectModel.findOne({projectName});
     }
     
 

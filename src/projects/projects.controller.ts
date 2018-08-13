@@ -6,40 +6,19 @@ import { CreatedByInterceptor } from 'common/interceptors/createdby.interceptor'
 import { Project } from './projects.interface';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
-import { of } from 'rxjs';
 
-@Controller('companies')
+
+@Controller('projects')
 @UseGuards(AuthGuard)
-export class CompaniesController {
+export class ProjectsController {
 
     constructor(private readonly projectsService: ProjectsService){}
 
     @Post('/add')
     @Roles('admin', 'manager')
     @UseInterceptors(CreatedByInterceptor)
-    @UseInterceptors(FileInterceptor('projectLogo', {
-        storage: diskStorage({
-            destination: (req, file, cb) => {
-                cb(null, './uploads/projects');
-            },
-            filename: (req, file, cb) => {
-                cb(null, `${file.originalname}`)
-            }
-        }),
-        fileFilter: (req, file, cb) => {
-            let ext = extname(file.originalname);
-            if(ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
-                return cb(new HttpException('Only images are allowed!',HttpStatus.BAD_REQUEST), null);
-            }
-            cb(null, true);
-        },
-        limits: {fileSize: 1024*1024}
-    }))
-    async add(@Body() company: Project, @UploadedFile() file){
-        if (file) {
-            return this.projectsService.addProject(company, file);
-        }
-        return of(null);
+    async add(@Body() project: Project){
+        return this.projectsService.addProject(project);
     }
 
     @Post('/all')
@@ -75,5 +54,3 @@ export class CompaniesController {
     //     limits: {fileSize: 1024*1024}
     // }))import { Controller } from '@nestjs/common';
 
-@Controller('projects')
-export class ProjectsController {}
