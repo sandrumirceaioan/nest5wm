@@ -6,7 +6,7 @@ export const ProjectsSchema = new mongoose.Schema({
         unique: true
     },
     projectDescription: String,
-    projectTags: String,
+    projectTags: [],
     projectCompany: String,
     projectLogo: {
         type: String,

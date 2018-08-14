@@ -27,6 +27,12 @@ export class ProjectsService {
     async oneProjectbyName(projectName: String): Promise<Project>{
         return await this.projectModel.findOne({projectName});
     }
+
+    async oneProjectById(params): Promise<Project>{
+        let project = await this.projectModel.findOne({_id: new ObjectId(params.id)});
+        if (!project) throw new HttpException('project not found', HttpStatus.BAD_REQUEST);
+        return project;
+    }
     
 
 }
