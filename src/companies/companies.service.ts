@@ -50,7 +50,6 @@ export class CompaniesService {
         let query = {
             _id: new ObjectId(params._id)
         };
-;
         let updatedCompany = await this.companyModel.findOneAndUpdate(query, params, {new: true});
         if (!updatedCompany) throw new HttpException('company not updated', HttpStatus.BAD_REQUEST);
         return updatedCompany;

@@ -6,6 +6,7 @@ import { CreatedByInterceptor } from 'common/interceptors/createdby.interceptor'
 import { Project } from './projects.interface';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { of } from 'rxjs';
 
 
 @Controller('projects')
@@ -31,6 +32,39 @@ export class ProjectsController {
     @Roles('admin', 'manager')
     async oneById(@Body() params){
         return this.projectsService.oneProjectById(params);
+    }
+
+    @Post('/upload')
+    @Roles('admin')
+        @UseInterceptors(FileInterceptor('projectLogo', {
+        storage: diskStorage({
+            destination: (req, file, cb) => {
+                cb(null, './uploads/projects');
+            },
+            filename: (req, file, cb) => {
+                cb(null, `${file.originalname}`)
+            }
+        }),
+        fileFilter: (req, file, cb) => {
+            let ext = extname(file.originalname);
+            if(ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
+                return cb(new HttpException('Only images are allowed!',HttpStatus.BAD_REQUEST), null);
+            }
+            cb(null, true);
+        },
+        limits: {fileSize: 1024*1024}
+    }))
+    async upload(@Body() params ,@UploadedFile() file){
+        if (file) {
+            return this.projectsService.updateLogo(params, file);
+        }
+        return of(null);
+    }
+
+    @Post('/update')
+    @Roles('admin', 'manager')
+    async update(@Body() params: Project) {
+        return this.projectsService.updateOne(params);
     }
 
 

@@ -39,6 +39,27 @@ export class ProjectsService {
     async countProjects(): Promise<number> {
         return await this.projectModel.collection.estimatedDocumentCount({});
     }
+
+    async updateOne(params): Promise<Project> {
+        let query = {
+            _id: new ObjectId(params._id)
+        };
+        let updatedProject = await this.projectModel.findOneAndUpdate(query, params, {new: true});
+        if (!updatedProject) throw new HttpException('project not updated', HttpStatus.BAD_REQUEST);
+        return updatedProject;
+    }
+
+    async updateLogo(params, file): Promise<Project> {
+        let query = {
+            _id: new ObjectId(params._id)
+        };
+        let set = {
+            projectLogo: file.filename
+        };
+            let updatedProject = await this.projectModel.findOneAndUpdate(query, set, {new: true});
+            if (!updatedProject) throw new HttpException('project logo not updated', HttpStatus.BAD_REQUEST);
+            return updatedProject;
+    }
     
 
 }
