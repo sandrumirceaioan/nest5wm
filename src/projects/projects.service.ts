@@ -12,7 +12,7 @@ export class ProjectsService {
         @InjectModel('Project') private readonly projectModel: Model<Project>
     ){ }
     
-    async addProject(project: Project): Promise<Project>{
+    async addProject(project: Project): Promise<Project> {
         let check = await this.oneProjectbyName(project.projectName);
         if (check) throw new HttpException(`${project.projectName} project already exists`, HttpStatus.BAD_REQUEST);
         let newProject = new this.projectModel(project);
@@ -20,18 +20,24 @@ export class ProjectsService {
         return save;
     }
 
-    async allProjects(): Promise<Project[]>{
-        return await this.projectModel.find().sort({created: 1});
+    async allProjects(params): Promise<any> {
+        let count = await this.countProjects();
+        let projects = await this.projectModel.find().skip(params.skip).limit(10);
+        return { projects, count };
     }
 
-    async oneProjectbyName(projectName: String): Promise<Project>{
+    async oneProjectbyName(projectName: String): Promise<Project> {
         return await this.projectModel.findOne({projectName});
     }
 
-    async oneProjectById(params): Promise<Project>{
+    async oneProjectById(params): Promise<Project> {
         let project = await this.projectModel.findOne({_id: new ObjectId(params.id)});
         if (!project) throw new HttpException('project not found', HttpStatus.BAD_REQUEST);
         return project;
+    }
+
+    async countProjects(): Promise<number> {
+        return await this.projectModel.collection.estimatedDocumentCount({});
     }
     
 

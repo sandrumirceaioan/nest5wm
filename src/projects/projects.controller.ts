@@ -23,8 +23,8 @@ export class ProjectsController {
 
     @Post('/all')
     @Roles('admin', 'manager')
-    async all(@Body() {}){
-        return this.projectsService.allProjects();
+    async all(@Body() params){
+        return this.projectsService.allProjects(params);
     }
 
     @Post('/oneById')
