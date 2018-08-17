@@ -1,4 +1,4 @@
-import { Controller, Req, Put, Post, Body, UseGuards, UseInterceptors, UsePipes, FileInterceptor, UploadedFile, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Req, Param, Put, Query, Get, Post, Body, UseGuards, UseInterceptors, UsePipes, FileInterceptor, UploadedFile, HttpException, HttpStatus, Delete } from '@nestjs/common';
 import { CompaniesService } from './companies.service';
 import { Roles } from 'common/decorators/roles.decorator';
 import { AuthGuard } from 'common/guards/auth.guard';
@@ -20,22 +20,22 @@ export class CompaniesController {
     @Roles('admin')
     @UseInterceptors(CreatedByInterceptor)
     async add(@Body() company: Company){
-        return this.companiesService.addCompany(company);
+        return this.companiesService.add(company);
     }
 
-    @Post('/all')
+    @Get('/all')
     @Roles('admin')
-    async all(@Body() {}){
-        return this.companiesService.allCompanies();
+    async all(@Query() {}){
+        return this.companiesService.all();
     }
 
-    @Post('/oneById')
+    @Get('/oneById/:id')
     @Roles('admin')
-    async oneById(@Body() params){
-        return this.companiesService.oneCompanyById(params);
+    async oneById(@Param() param){
+        return this.companiesService.oneById(param.id);
     }
 
-    @Post('/upload')
+    @Put('/upload')
     @Roles('admin')
         @UseInterceptors(FileInterceptor('companyLogo', {
         storage: diskStorage({
@@ -55,41 +55,17 @@ export class CompaniesController {
         },
         limits: {fileSize: 1024*1024}
     }))
-    async upload(@Body() params ,@UploadedFile() file){
+    async put(@Body() params ,@UploadedFile() file){
         if (file) {
             return this.companiesService.updateLogo(params, file);
         }
         return of(null);
     }
 
-    @Post('/update')
+    @Put('/update')
     @Roles('admin')
     async update(@Body() params: Company) {
         return this.companiesService.updateOne(params);
     }
 
 }
-
-
-// import { diskStorage } from 'multer';
-// import { extname } from 'path';
-
-    // image upload interceptor
-    // @UseInterceptors(FileInterceptor('companyLogo', {
-    //     storage: diskStorage({
-    //         destination: (req, file, cb) => {
-    //             cb(null, './uploads');
-    //         },
-    //         filename: (req, file, cb) => {
-    //             cb(null, `${file.originalname}`)
-    //         }
-    //     }),
-    //     fileFilter: (req, file, cb) => {
-    //         let ext = extname(file.originalname);
-    //         if(ext !== '.png' && ext !== '.jpg' && ext !== '.gif' && ext !== '.jpeg') {
-    //             return cb(new HttpException('Only images are allowed!',HttpStatus.BAD_REQUEST), null);
-    //         }
-    //         cb(null, true);
-    //     },
-    //     limits: {fileSize: 1024*1024}
-    // }))

@@ -12,24 +12,24 @@ export class CompaniesService {
         @InjectModel('Company') private readonly companyModel: Model<Company>
     ){ }
 
-    async addCompany(company: Company): Promise<Company>{
-        let check = await this.oneCompanybyName(company.companyName);
+    async add(company: Company): Promise<Company>{
+        let check = await this.oneByName(company.companyName);
         if (check) throw new HttpException(`${company.companyName} company already exists`, HttpStatus.BAD_REQUEST);
         let newCompany = new this.companyModel(company);
         let save = newCompany.save();
         return save;
     }
 
-    async allCompanies(): Promise<Company[]>{
+    async all(): Promise<Company[]>{
         return await this.companyModel.find().sort({created: 1});
     }
 
-    async oneCompanybyName(companyName: String): Promise<Company>{
+    async oneByName(companyName: String): Promise<Company>{
         return await this.companyModel.findOne({companyName});
     }
 
-    async oneCompanyById(params): Promise<Company>{
-        let company = await this.companyModel.findOne({_id: new ObjectId(params.id)});
+    async oneById(id): Promise<Company>{
+        let company = await this.companyModel.findOne({_id: new ObjectId(id)});
         if (!company) throw new HttpException('company not found', HttpStatus.BAD_REQUEST);
         return company;
     }
@@ -53,6 +53,10 @@ export class CompaniesService {
         let updatedCompany = await this.companyModel.findOneAndUpdate(query, params, {new: true});
         if (!updatedCompany) throw new HttpException('company not updated', HttpStatus.BAD_REQUEST);
         return updatedCompany;
+    }
+
+    async deleteOne(gg){
+        return;
     }
     
 

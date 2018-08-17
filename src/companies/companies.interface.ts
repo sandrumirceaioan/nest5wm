@@ -8,6 +8,7 @@ export interface Company extends mongoose.Document {
   companyPhone: string;
   companyEmail: string;
   companyLogo: string;
+  companyProjects?: any;
   created?: Date;
   createdBy?: string;
 }

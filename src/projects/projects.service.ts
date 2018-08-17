@@ -12,31 +12,37 @@ export class ProjectsService {
         @InjectModel('Project') private readonly projectModel: Model<Project>
     ){ }
     
-    async addProject(project: Project): Promise<Project> {
-        let check = await this.oneProjectbyName(project.projectName);
+    async add(project: Project): Promise<Project> {
+        let check = await this.onebyName(project.projectName);
         if (check) throw new HttpException(`${project.projectName} project already exists`, HttpStatus.BAD_REQUEST);
         let newProject = new this.projectModel(project);
         let save = newProject.save();
         return save;
     }
 
-    async allProjects(params): Promise<any> {
-        let count = await this.countProjects();
-        let projects = await this.projectModel.find().skip(params.skip).limit(10);
+    async all(params): Promise<any> {
+        let count = await this.count();
+        let projects = await this.projectModel.find().skip(parseInt(params.skip)).limit(10).sort({_id:-1});
         return { projects, count };
     }
 
-    async oneProjectbyName(projectName: String): Promise<Project> {
+    async onebyName(projectName): Promise<Project> {
         return await this.projectModel.findOne({projectName});
     }
 
-    async oneProjectById(params): Promise<Project> {
-        let project = await this.projectModel.findOne({_id: new ObjectId(params.id)});
+    async oneById(id): Promise<Project> {
+        let project = await this.projectModel.findOne({_id: new ObjectId(id)});
         if (!project) throw new HttpException('project not found', HttpStatus.BAD_REQUEST);
         return project;
     }
 
-    async countProjects(): Promise<number> {
+    async allById(id): Promise<any> {
+        let projects = await this.projectModel.find({projectCompany: id}).sort({_id:-1});
+        if (!projects) throw new HttpException('projects not found', HttpStatus.BAD_REQUEST);
+        return projects;
+    }
+
+    async count(): Promise<number> {
         return await this.projectModel.collection.estimatedDocumentCount({});
     }
 

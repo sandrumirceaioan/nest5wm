@@ -1,4 +1,4 @@
-import { Controller, Req, Put, Post, Body, UseGuards, UseInterceptors, UsePipes, FileInterceptor, UploadedFile, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Req, Put, Get, Post, Body, Query, Param, UseGuards, UseInterceptors, UsePipes, FileInterceptor, UploadedFile, HttpException, HttpStatus } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { Roles } from 'common/decorators/roles.decorator';
 import { AuthGuard } from 'common/guards/auth.guard';
@@ -19,22 +19,29 @@ export class ProjectsController {
     @Roles('admin', 'manager')
     @UseInterceptors(CreatedByInterceptor)
     async add(@Body() project: Project){
-        return this.projectsService.addProject(project);
+        return this.projectsService.add(project);
     }
 
-    @Post('/all')
+    @Get('/all')
     @Roles('admin', 'manager')
-    async all(@Body() params){
-        return this.projectsService.allProjects(params);
+    async all(@Query() params){
+        console.log(params);
+        return this.projectsService.all(params);
     }
 
-    @Post('/oneById')
+    @Get('/allById/:id')
     @Roles('admin', 'manager')
-    async oneById(@Body() params){
-        return this.projectsService.oneProjectById(params);
+    async allById(@Param() params) {
+        return await this.projectsService.allById(params.id);
     }
 
-    @Post('/upload')
+    @Get('/oneById/:id')
+    @Roles('admin', 'manager')
+    async oneById(@Param() param){
+        return this.projectsService.oneById(param.id);
+    }
+
+    @Put('/upload')
     @Roles('admin')
         @UseInterceptors(FileInterceptor('projectLogo', {
         storage: diskStorage({
@@ -61,7 +68,7 @@ export class ProjectsController {
         return of(null);
     }
 
-    @Post('/update')
+    @Put('/update')
     @Roles('admin', 'manager')
     async update(@Body() params: Project) {
         return this.projectsService.updateOne(params);
