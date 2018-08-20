@@ -9,7 +9,7 @@ const app = await NestFactory.create(AppModule);
 
 	app.useGlobalFilters(new AnyExceptionFilter());
 	app.setGlobalPrefix('/api');
-	app.useStaticAssets(join(__dirname + './../uploads'));
+	app.useStaticAssets(join(__dirname + './../uploads/projects'));
 	app.useStaticAssets(join(__dirname + './../uploads/companies'));
 	
   	await app.listen(process.env.PORT || 3000)
