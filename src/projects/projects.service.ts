@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Project } from './projects.interface';
+import { CompaniesService } from 'companies/companies.service';
 
 const ObjectId = Types.ObjectId;
 
@@ -9,12 +10,15 @@ const ObjectId = Types.ObjectId;
 export class ProjectsService {
 
     constructor(
-        @InjectModel('Project') private readonly projectModel: Model<Project>
+        @InjectModel('Project') private readonly projectModel: Model<Project>,
+        private companiesService: CompaniesService
     ){ }
     
     async add(project: Project): Promise<Project> {
         let check = await this.onebyName(project.projectName);
         if (check) throw new HttpException(`${project.projectName} project already exists`, HttpStatus.BAD_REQUEST);
+        let company = await this.companiesService.oneById(project.projectCompanyId);
+        project.projectCompany = company.companyName;
         let newProject = new this.projectModel(project);
         let save = newProject.save();
         return save;
@@ -37,7 +41,7 @@ export class ProjectsService {
     }
 
     async allById(id): Promise<any> {
-        let projects = await this.projectModel.find({projectCompany: id}).sort({_id:-1});
+        let projects = await this.projectModel.find({projectCompanyId: id}).sort({_id:-1});
         if (!projects) throw new HttpException('projects not found', HttpStatus.BAD_REQUEST);
         return projects;
     }
@@ -50,6 +54,8 @@ export class ProjectsService {
         let query = {
             _id: new ObjectId(params._id)
         };
+        let company = await this.companiesService.oneById(params.projectCompanyId);
+        params.projectCompany = company.companyName;
         let updatedProject = await this.projectModel.findOneAndUpdate(query, params, {new: true});
         if (!updatedProject) throw new HttpException('project not updated', HttpStatus.BAD_REQUEST);
         return updatedProject;

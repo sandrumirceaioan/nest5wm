@@ -5,6 +5,7 @@ export interface Project extends mongoose.Document {
     projectDescription: string;
     projectTags: object;
     projectCompany: string;
+    projectCompanyId: string;
     projectLogo: string;
     created?: Date;
     createdBy?: string;

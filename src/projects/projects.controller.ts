@@ -25,7 +25,6 @@ export class ProjectsController {
     @Get('/all')
     @Roles('admin', 'manager')
     async all(@Query() params){
-        console.log(params);
         return this.projectsService.all(params);
     }
 

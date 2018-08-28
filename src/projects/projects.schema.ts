@@ -8,6 +8,7 @@ export const ProjectsSchema = new mongoose.Schema({
     projectDescription: String,
     projectTags: [],
     projectCompany: String,
+    projectCompanyId: String,
     projectLogo: {
         type: String,
         default: 'default-image.png'
