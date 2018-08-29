@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Company } from './companies.interface';
+import * as moment from 'moment';
 
 const ObjectId = Types.ObjectId;
 
@@ -39,7 +40,8 @@ export class CompaniesService {
             _id: new ObjectId(params._id)
         };
         let set = {
-            companyLogo: file.filename
+            companyLogo: file.filename,
+            modified: moment().utc()
         };
             let updatedCompany = await this.companyModel.findOneAndUpdate(query, set, {new: true});
             if (!updatedCompany) throw new HttpException('company logo not updated', HttpStatus.BAD_REQUEST);
@@ -50,6 +52,7 @@ export class CompaniesService {
         let query = {
             _id: new ObjectId(params._id)
         };
+        params.modified = moment().utc();
         let updatedCompany = await this.companyModel.findOneAndUpdate(query, params, {new: true});
         if (!updatedCompany) throw new HttpException('company not updated', HttpStatus.BAD_REQUEST);
         return updatedCompany;

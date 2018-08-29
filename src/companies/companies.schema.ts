@@ -20,5 +20,11 @@ export const CompaniesSchema = new mongoose.Schema({
         return new Date().getTime()
     }
   },
-  createdBy: String
+  modified: {
+    type: Date
+  },
+  createdById: String,
+  createdByName: String,
+  modifiedById: String,
+  modifiedByName: String
 });

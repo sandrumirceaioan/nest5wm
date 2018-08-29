@@ -2,7 +2,8 @@ import { Controller, Req, Param, Put, Query, Get, Post, Body, UseGuards, UseInte
 import { CompaniesService } from './companies.service';
 import { Roles } from 'common/decorators/roles.decorator';
 import { AuthGuard } from 'common/guards/auth.guard';
-import { CreatedByInterceptor } from 'common/interceptors/createdby.interceptor';
+import { CreatedInterceptor } from 'common/interceptors/created.interceptor';
+import { ModifiedInterceptor } from 'common/interceptors/modified.interceptor';
 import { Company } from './companies.interface';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
@@ -18,7 +19,7 @@ export class CompaniesController {
 
     @Post('/add')
     @Roles('admin')
-    @UseInterceptors(CreatedByInterceptor)
+    @UseInterceptors(CreatedInterceptor)
     async add(@Body() company: Company){
         return this.companiesService.add(company);
     }
@@ -55,6 +56,7 @@ export class CompaniesController {
         },
         limits: {fileSize: 1024*1024}
     }))
+    @UseInterceptors(ModifiedInterceptor)
     async put(@Body() params ,@UploadedFile() file){
         if (file) {
             return this.companiesService.updateLogo(params, file);
@@ -64,6 +66,7 @@ export class CompaniesController {
 
     @Put('/update')
     @Roles('admin')
+    @UseInterceptors(ModifiedInterceptor)
     async update(@Body() params: Company) {
         return this.companiesService.updateOne(params);
     }

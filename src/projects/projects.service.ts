@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Project } from './projects.interface';
 import { CompaniesService } from 'companies/companies.service';
+import * as moment from 'moment';
 
 const ObjectId = Types.ObjectId;
 
@@ -56,6 +57,7 @@ export class ProjectsService {
         };
         let company = await this.companiesService.oneById(params.projectCompanyId);
         params.projectCompany = company.companyName;
+        params.modified = moment().utc();
         let updatedProject = await this.projectModel.findOneAndUpdate(query, params, {new: true});
         if (!updatedProject) throw new HttpException('project not updated', HttpStatus.BAD_REQUEST);
         return updatedProject;
@@ -66,7 +68,8 @@ export class ProjectsService {
             _id: new ObjectId(params._id)
         };
         let set = {
-            projectLogo: file.filename
+            projectLogo: file.filename,
+            modified: moment().utc()
         };
             let updatedProject = await this.projectModel.findOneAndUpdate(query, set, {new: true});
             if (!updatedProject) throw new HttpException('project logo not updated', HttpStatus.BAD_REQUEST);

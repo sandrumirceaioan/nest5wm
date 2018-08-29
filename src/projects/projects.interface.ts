@@ -8,5 +8,9 @@ export interface Project extends mongoose.Document {
     projectCompanyId: string;
     projectLogo: string;
     created?: Date;
-    createdBy?: string;
+    modified?: Date;
+    createdById?: string;
+    createdByName?: string;
+    modifiedById?: string;
+    modifiedByName?: string;
 }

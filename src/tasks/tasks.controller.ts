@@ -2,7 +2,8 @@ import { Controller, Req, Put, Get, Post, Body, Query, Param, UseGuards, UseInte
 import { TasksService } from './tasks.service';
 import { Roles } from 'common/decorators/roles.decorator';
 import { AuthGuard } from 'common/guards/auth.guard';
-import { CreatedByInterceptor } from 'common/interceptors/createdby.interceptor';
+import { CreatedInterceptor } from 'common/interceptors/created.interceptor';
+import { ModifiedInterceptor } from 'common/interceptors/modified.interceptor';
 import { Task } from './tasks.interface';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
@@ -17,7 +18,7 @@ export class TasksController {
 
     @Post('/add')
     @Roles('admin', 'manager', 'user')
-    @UseInterceptors(CreatedByInterceptor)
+    @UseInterceptors(CreatedInterceptor)
     async add(@Body() project: Task){
         return this.tasksService.add(project);
     }

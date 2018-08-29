@@ -11,7 +11,9 @@ export interface Task extends mongoose.Document {
     taskDifficulty: string;
     taskDeadline: Date;
     created?: Date;
-    createdBy?: string;
     modified?: Date;
-    modifiedBy?: string; 
+    createdById?: string;
+    createdByName?: string;
+    modifiedById?: string;
+    modifiedByName?: string;
 }

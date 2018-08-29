@@ -10,5 +10,9 @@ export interface Company extends mongoose.Document {
   companyLogo: string;
   companyProjects?: any;
   created?: Date;
-  createdBy?: string;
+  modified?: Date;
+  createdById?: string;
+  createdByName?: string;
+  modifiedById?: string;
+  modifiedByName?: string;
 }

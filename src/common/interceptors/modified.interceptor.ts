@@ -3,14 +3,15 @@ import { Observable, throwError } from 'rxjs';
 import * as jwt_decode from "jwt-decode";
 
 @Injectable()
-export class CreatedByInterceptor implements NestInterceptor {
+export class ModifiedInterceptor implements NestInterceptor {
   intercept(
     context: ExecutionContext,
     call$: Observable<any>,
   ): Observable<any> {
     let request = context.switchToHttp().getRequest();
     let decoded: any = jwt_decode(request.headers['x-access-token']);
-    request.body.createdBy = decoded.id;
+    request.body.modifiedById = decoded.id;
+    request.body.modifiedByName = decoded.user;
     return call$;
   }
 }

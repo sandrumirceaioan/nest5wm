@@ -22,7 +22,11 @@ export const TasksSchema = new mongoose.Schema({
             return new Date().getTime()
         }
     },
-    createdBy: String,
-    modified: Date,
-    modifiedBy: String
+    modified: {
+        type: Date
+    },
+    createdById: String,
+    createdByName: String,
+    modifiedById: String,
+    modifiedByName: String
 });

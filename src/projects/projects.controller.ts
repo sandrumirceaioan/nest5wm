@@ -2,7 +2,8 @@ import { Controller, Req, Put, Get, Post, Body, Query, Param, UseGuards, UseInte
 import { ProjectsService } from './projects.service';
 import { Roles } from 'common/decorators/roles.decorator';
 import { AuthGuard } from 'common/guards/auth.guard';
-import { CreatedByInterceptor } from 'common/interceptors/createdby.interceptor';
+import { CreatedInterceptor } from 'common/interceptors/created.interceptor';
+import { ModifiedInterceptor } from 'common/interceptors/modified.interceptor';
 import { Project } from './projects.interface';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
@@ -17,7 +18,7 @@ export class ProjectsController {
 
     @Post('/add')
     @Roles('admin', 'manager')
-    @UseInterceptors(CreatedByInterceptor)
+    @UseInterceptors(CreatedInterceptor)
     async add(@Body() project: Project){
         return this.projectsService.add(project);
     }
@@ -60,6 +61,7 @@ export class ProjectsController {
         },
         limits: {fileSize: 1024*1024}
     }))
+    @UseInterceptors(ModifiedInterceptor)
     async upload(@Body() params ,@UploadedFile() file){
         if (file) {
             return this.projectsService.updateLogo(params, file);
@@ -69,6 +71,7 @@ export class ProjectsController {
 
     @Put('/update')
     @Roles('admin', 'manager')
+    @UseInterceptors(ModifiedInterceptor)
     async update(@Body() params: Project) {
         return this.projectsService.updateOne(params);
     }
