@@ -1,6 +1,6 @@
-import { Controller, Get, Post, Body, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Query, Post, Body, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './user.dto';
+import { Roles } from 'common/decorators/roles.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -22,8 +22,8 @@ export class UsersController {
         return this.usersService.checkLogged(token);
     }
 
-    // @Post('/all')
-    // async all(@Body() params: any){
-    //     return this.usersService.allUsers(params);
-    // }
+    @Get('/all')
+    async all(@Query() params){
+        return this.usersService.all(params);
+    }
 }

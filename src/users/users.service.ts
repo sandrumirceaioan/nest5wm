@@ -50,9 +50,9 @@ export class UsersService {
         return await this.userModel.findOne({ _id: new ObjectId(id)});
     }
 
-    // async allUsers(params): Promise<User[]>{
-    //     let query = {}; 
-    //     let users = await this.userModel.find(query).sort({userName: -1}).select({ "userName": 1, "_id": 1});
-    //     return users;
-    // }
+    async all(params): Promise<User[]>{
+        let query = {}; 
+        let users = await this.userModel.find(query).select({ "userName": 1, "_id": 1});
+        return users;
+    }
 }
