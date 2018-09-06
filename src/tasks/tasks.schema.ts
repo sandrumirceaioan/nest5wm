@@ -14,6 +14,7 @@ export const TasksSchema = new mongoose.Schema({
         type: String,
         default: 'new'
     },
+    taskAssignedTo: String,
     taskDifficulty: String,
     taskDeadline: Date,
     created: {

@@ -8,6 +8,7 @@ export interface Task extends mongoose.Document {
     taskCompany: string;
     taskCompanyId: string;
     taskStatus: string;
+    taskAssignedTo: string;
     taskDifficulty: string;
     taskDeadline: Date;
     created?: Date;
