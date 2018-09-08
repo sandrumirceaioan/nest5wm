@@ -5,6 +5,7 @@ import { Task } from './tasks.interface';
 import * as moment from 'moment';
 import { ProjectsService } from 'projects/projects.service';
 import { CompaniesService } from 'companies/companies.service';
+import * as _ from 'underscore';
 
 
 const ObjectId = Types.ObjectId;
@@ -29,13 +30,17 @@ export class TasksService {
     }
 
     async allPaginated(params): Promise<any> {
-        let count = await this.count();
-        let tasks = await this.taskModel.find().skip(parseInt(params.skip)).limit(10);
+        let skip = params.page ? (params.page - 1) * 15 : 0;
+        let filter: any = {};
+        if(params.search != 'undefined' && params.search != '') filter.taskName = {$regex: ".*" + params.search + ".*", $options: '-i'};
+        if(params.user != 'undefined') filter.taskAssignedTo = params.user;
+        let count = await this.count(filter);
+        let tasks = await this.taskModel.find(filter).skip(skip).limit(15).select({ "taskName": 1, "_id": 1});;
         return { tasks, count };
     }
 
-    async count(): Promise<number> {
-        return await this.taskModel.collection.estimatedDocumentCount({});
+    async count(e): Promise<number> {
+        return await this.taskModel.count(e);
     }
 
 }
