@@ -26,7 +26,13 @@ export class ProjectsController {
     @Get('/all')
     @Roles('admin', 'manager')
     async all(@Query() params){
-        return this.projectsService.all(params);
+        return this.projectsService.all();
+    }
+
+    @Get('/allLimited')
+    @Roles('admin', 'manager')
+    async allLimited(@Query() params){
+        return this.projectsService.allLimited(params);
     }
 
     @Get('/allById/:id')

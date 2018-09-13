@@ -25,7 +25,11 @@ export class ProjectsService {
         return save;
     }
 
-    async all(params): Promise<any> {
+    async all(): Promise<Project[]>{
+        return await this.projectModel.find().sort({created: 1});
+    }
+
+    async allLimited(params): Promise<any> {
         let count = await this.count();
         let projects = await this.projectModel.find().skip(parseInt(params.skip)).limit(10).sort({_id:-1});
         return { projects, count };
