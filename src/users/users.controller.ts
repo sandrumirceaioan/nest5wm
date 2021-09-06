@@ -9,6 +9,7 @@ export class UsersController {
 
     @Post('/login')
     async login(@Body() credentials){
+        console.log(credentials);
         return this.usersService.loginUser(credentials);
     }
 

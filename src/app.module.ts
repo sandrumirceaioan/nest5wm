@@ -13,7 +13,7 @@ import { TasksModule } from './tasks/tasks.module';
     UsersModule,
     ProjectsModule,
     TasksModule,
-    MongooseModule.forRoot('mongodb://admin:rappac33!@ds247357.mlab.com:47357/tmwm', { useNewUrlParser: true
+    MongooseModule.forRoot('mongodb+srv://tmwm:Password123!@cluster0.kcbtv.mongodb.net/test', { useNewUrlParser: true
   })  
   ],
   controllers: [AppController],

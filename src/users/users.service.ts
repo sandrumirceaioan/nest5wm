@@ -19,6 +19,7 @@ export class UsersService {
         if (!params.userName || !params.password) throw new HttpException('username and password required', HttpStatus.BAD_REQUEST);
         let salt = '4m0$pr4l3*s0!p3n~d3';
         params.password = md5(params.password+salt);
+        console.log('user params: ', params);
         let loggedUser = await this.userModel.findOne(params);
         if (!loggedUser) throw new HttpException('user not found', HttpStatus.UNAUTHORIZED);
 
